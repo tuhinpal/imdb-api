@@ -4,14 +4,16 @@ const title = new Hono();
 
 title.use("/:id", async (c, next) => {
   const id = c.req.param("id");
-  let get = await CACHE.get(id);
-  if (get) {
-    c.header("x-cache", "HIT");
-    return c.json(JSON.parse(get));
-  } else {
-    await next();
-    c.header("x-cache", "MISS");
-  }
+
+  try {
+    let get = await CACHE.get(id);
+    if (get) {
+      c.header("x-cache", "HIT");
+      return c.json(JSON.parse(get));
+    }
+  } catch (_) {}
+  await next();
+  c.header("x-cache", "MISS");
 });
 
 title.get("/:id", async (c) => {
@@ -103,7 +105,9 @@ title.get("/:id", async (c) => {
       response.top_credits = [];
     }
 
-    await CACHE.put(id, JSON.stringify(response), { expirationTtl: 604800 });
+    try {
+      await CACHE.put(id, JSON.stringify(response), { expirationTtl: 604800 });
+    } catch (_) {}
 
     return c.json(response);
   } catch (error) {

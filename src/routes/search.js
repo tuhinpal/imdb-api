@@ -5,13 +5,15 @@ const search = new Hono();
 search.use("/", async (c, next) => {
   let query = c.req.query("query");
 
-  if (query) {
-    let get = await CACHE.get(`search-${query}`);
-    if (get) {
-      c.header("x-cache", "HIT");
-      return c.json(JSON.parse(get));
+  try {
+    if (query) {
+      let get = await CACHE.get(`search-${query}`);
+      if (get) {
+        c.header("x-cache", "HIT");
+        return c.json(JSON.parse(get));
+      }
     }
-  }
+  } catch (_) {}
   await next();
   c.header("x-cache", "MISS");
 });
@@ -65,11 +67,13 @@ search.get("/", async (c) => {
 
     response.results = titles;
 
-    if (titles.length > 0) {
-      await CACHE.put(`search-${query}`, JSON.stringify(response), {
-        expirationTtl: 21600,
-      });
-    }
+    try {
+      if (titles.length > 0) {
+        await CACHE.put(`search-${query}`, JSON.stringify(response), {
+          expirationTtl: 21600,
+        });
+      }
+    } catch (_) {}
 
     return c.json(response);
   } catch (error) {
