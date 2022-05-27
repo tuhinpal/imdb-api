@@ -6,15 +6,20 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "miniflare --watch --debug --kv CACHE --kv-persist",
-    "publish": "wrangler publish"
+    "publish": "wrangler publish",
+    "test": "jest"
   },
   "author": "tuhinpal <me@thetuhin.com>",
   "license": "MIT",
   "devDependencies": {
+    "axios": "^0.27.2",
+    "jest": "^28.1.0",
     "miniflare": "^2.4.0"
   },
   "dependencies": {
+    "concurrently": "^7.2.1",
     "dom-parser": "^0.1.6",
-    "hono": "^1.4.1"
+    "hono": "^1.4.1",
+    "remove": "^0.1.5"
   }
 }
