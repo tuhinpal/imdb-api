@@ -2,7 +2,7 @@
   "private": true,
   "name": "imdb-api",
   "version": "1.0.0",
-  "description": "Serverless Imdb API",
+  "description": "Serverless IMDB API powered by Cloudflare Worker",
   "main": "src/index.js",
   "scripts": {
     "dev": "miniflare --watch --debug --kv CACHE --kv-persist",
@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "author": "tuhinpal <me@thetuhin.com>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "devDependencies": {
     "axios": "^0.27.2",
     "jest": "^28.1.0",
@@ -21,5 +21,23 @@
     "dom-parser": "^0.1.6",
     "hono": "^1.4.1",
     "remove": "^0.1.5"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuhinpal/imdb-api.git"
+  },
+  "keywords": [
+    "imdb",
+    "imdb-api",
+    "movie-list",
+    "cloudflare-worker",
+    "cloudflare-workers"
+  ],
+  "bugs": {
+    "url": "https://github.com/tuhinpal/imdb-api/issues"
+  },
+  "homepage": "https://github.com/tuhinpal/imdb-api#readme"
 }
