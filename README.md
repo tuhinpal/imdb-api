@@ -1,4 +1,4 @@
-![IMDB-API](https://firebasestorage.googleapis.com/v0/b/cdn-tuhin.appspot.com/o/16537056719q7?alt=media&token=6343c68a-fe99-4344-b5a5-838219e1067d)
+![IMDB API](https://user-images.githubusercontent.com/51857187/170807293-a52d8141-f743-4501-82e5-55e3d4286e61.jpg)
 
 ## Features 🪶
 
