@@ -6,3 +6,6 @@ workers_dev = true
 route = ""
 zone_id = ""
 compatibility_date = "2022-05-27"
+kv_namespaces = [
+         { binding = "CACHE", id = "717ce22cba32418ba70434aba25ba589" }
+]
