@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import DomParser from "dom-parser";
+import { escape } from "html-escaper";
 const title = new Hono();
 
 title.use("/:id", async (c, next) => {
@@ -43,14 +44,14 @@ title.get("/:id", async (c) => {
 
     // title
     // response.title = getNode(dom, "h1", "hero-title-block__title").innerHTML;
-    response.title = schema.name;
+    response.title = escape(schema.name);
 
     // image
     response.image = schema.image;
 
     // plot
     // response.plot = getNode(dom, "span", "plot-l").innerHTML;
-    response.plot = schema.description;
+    response.plot = escape(schema.description);
 
     // rating
     response.rating = {
