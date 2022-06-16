@@ -12,6 +12,7 @@
   "author": "tuhinpal <me@thetuhin.com>",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@cloudflare/wrangler": "^1.19.12",
     "axios": "^0.27.2",
     "jest": "^28.1.0",
     "miniflare": "^2.5.0"

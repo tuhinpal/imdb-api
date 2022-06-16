@@ -47,6 +47,15 @@ search.get("/", async (c) => {
         let image = node.getElementsByTagName("img")[0].attributes;
         image = image.find((attr) => attr.name === "src").value;
 
+        try {
+          image = image.replace(/[.]_.*_[.]/, `._V1_UY396_CR6,0,291,396_AL_.`);
+        } catch (_) {}
+
+        let image_large = image;
+        try {
+          image_large = image_large.replace(/[.]_.*_[.]/, ".");
+        } catch (_) {}
+
         let a = node.getElementsByTagName("a")[0].attributes;
         a = a.find((attr) => attr.name === "href").value;
         let match = a.match(/\/title\/(.*)\//);
@@ -61,6 +70,7 @@ search.get("/", async (c) => {
           id,
           title,
           image,
+          image_large,
           api_path: `/title/${id}`,
           imdb: `https://www.imdb.com/title/${id}`,
         });
