@@ -107,7 +107,7 @@ title.get("/:id", async (c) => {
     }
 
     try {
-      await CACHE.put(id, JSON.stringify(response), { expirationTtl: 604800 });
+      await CACHE.put(id, JSON.stringify(response), { expirationTtl: 86400 });
     } catch (_) {}
 
     return c.json(response);
