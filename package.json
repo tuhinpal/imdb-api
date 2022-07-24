@@ -20,8 +20,7 @@
   "dependencies": {
     "dom-parser": "^0.1.6",
     "hono": "^1.4.1",
-    "html-escaper": "^3.0.3",
-    "remove": "^0.1.5"
+    "html-entities": "^2.3.3"
   },
   "directories": {
     "test": "tests"

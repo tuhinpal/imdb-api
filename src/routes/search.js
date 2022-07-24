@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import DomParser from "dom-parser";
-import { escape } from "html-escaper";
+import { decode as entityDecoder } from "html-entities";
 const search = new Hono();
 
 search.use("/", async (c, next) => {
@@ -64,7 +64,7 @@ search.get("/", async (c) => {
         let title = node.getElementsByClassName("result_text")[0].textContent;
         title = title.replace(/"/g, "'");
         title = title.trim();
-        title = escape(title);
+        title = entityDecoder(title, { level: "html5" });
 
         titles.push({
           id,

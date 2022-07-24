@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import DomParser from "dom-parser";
-import { escape } from "html-escaper";
+import { decode as entityDecoder } from "html-entities";
 const title = new Hono();
 
 title.use("/:id", async (c, next) => {
@@ -44,14 +44,14 @@ title.get("/:id", async (c) => {
 
     // title
     // response.title = getNode(dom, "h1", "hero-title-block__title").innerHTML;
-    response.title = escape(schema.name);
+    response.title = entityDecoder(schema.name, { level: "html5" });
 
     // image
     response.image = schema.image;
 
     // plot
     // response.plot = getNode(dom, "span", "plot-l").innerHTML;
-    response.plot = escape(schema.description);
+    response.plot = entityDecoder(schema.description, { level: "html5" });
 
     // rating
     response.rating = {
@@ -63,7 +63,9 @@ title.get("/:id", async (c) => {
     response.contentRating = schema.contentRating;
 
     // genre
-    response.genre = schema.genre;
+    response.genre = schema.genre.map((e) =>
+      entityDecoder(e, { level: "html5" })
+    );
 
     // year and runtime
     try {
@@ -78,13 +80,17 @@ title.get("/:id", async (c) => {
     }
     // actors
     try {
-      response.actors = schema.actor.map((e) => e.name);
+      response.actors = schema.actor.map((e) =>
+        entityDecoder(e.name, { level: "html5" })
+      );
     } catch (_) {
       response.actors = [];
     }
     // director
     try {
-      response.directors = schema.director.map((e) => e.name);
+      response.directors = schema.director.map((e) =>
+        entityDecoder(e.name, { level: "html5" })
+      );
     } catch (_) {
       response.directors = [];
     }
@@ -97,8 +103,8 @@ title.get("/:id", async (c) => {
       response.top_credits = top_credits.childNodes.map((e) => {
         return {
           name: e.firstChild.textContent,
-          value: e.childNodes[1].firstChild.childNodes.map(
-            (e) => e.textContent
+          value: e.childNodes[1].firstChild.childNodes.map((e) =>
+            entityDecoder(e.textContent, { level: "html5" })
           ),
         };
       });
