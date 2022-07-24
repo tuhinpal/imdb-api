@@ -1,6 +1,8 @@
 import { Hono } from "hono";
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
+import config from "../../config";
+import seriesFetcher from "../helpers/seriiesFetcher";
 const title = new Hono();
 
 title.use("/:id", async (c, next) => {
@@ -113,8 +115,17 @@ title.get("/:id", async (c) => {
     }
 
     try {
-      await CACHE.put(id, JSON.stringify(response), { expirationTtl: 86400 });
-    } catch (_) {}
+      if (["TVSeries"].includes(response.contentType)) {
+        let seasons = await seriesFetcher(id);
+        response.seasons = seasons;
+      }
+    } catch (error) {}
+
+    if (!config.cacheDisabled) {
+      try {
+        await CACHE.put(id, JSON.stringify(response), { expirationTtl: 86400 });
+      } catch (_) {}
+    }
 
     return c.json(response);
   } catch (error) {

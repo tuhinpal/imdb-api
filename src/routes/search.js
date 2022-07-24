@@ -1,6 +1,8 @@
 import { Hono } from "hono";
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
+import config from "../../config";
+
 const search = new Hono();
 
 search.use("/", async (c, next) => {
@@ -80,7 +82,7 @@ search.get("/", async (c) => {
     response.results = titles;
 
     try {
-      if (titles.length > 0) {
+      if (!config.cacheDisabled && titles.length > 0) {
         await CACHE.put(`search-${query}`, JSON.stringify(response), {
           expirationTtl: 21600,
         });
