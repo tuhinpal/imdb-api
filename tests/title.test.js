@@ -22,4 +22,6 @@ test("test title route tvseries", async () => {
   expect(Array.isArray(data.data.rating.star)).not.toBe(0);
   expect(Array.isArray(data.data.actors)).toBe(true);
   expect(Array.isArray(data.data.directors)).toBe(true);
+  expect(Array.isArray(data.data.seasons)).toBe(true);
+  expect(data.data.seasons.length > 0).toBe(true);
 });
