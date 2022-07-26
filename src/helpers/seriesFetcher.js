@@ -43,7 +43,7 @@ export default async function seriesFetcher(id) {
             ).text();
           }
 
-          let parsed = parseEpisodes(html);
+          let parsed = parseEpisodes(html, season.id);
           season.name = parsed.name;
           season.episodes = parsed.episodes;
         } catch (sfe) {
@@ -61,7 +61,7 @@ export default async function seriesFetcher(id) {
   return seasons;
 }
 
-function parseEpisodes(raw) {
+function parseEpisodes(raw, seasonId) {
   let parser = new DomParser();
   let dom = parser.parseFromString(raw);
 
@@ -84,7 +84,8 @@ function parseEpisodes(raw) {
 
       let noStr = null;
       try {
-        noStr = node.getElementsByClassName("image")[0].textContent.trim();
+        // noStr = node.getElementsByClassName("image")[0].textContent.trim();
+        noStr = `S${seasonId}, Ep${index + 1}`;
       } catch (_) {}
 
       let publishedDate = null;

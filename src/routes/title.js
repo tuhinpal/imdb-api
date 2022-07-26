@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
 import config from "../../config";
-import seriesFetcher from "../helpers/seriiesFetcher";
+import seriesFetcher from "../helpers/seriesFetcher";
 const title = new Hono();
 
 title.use("/:id", async (c, next) => {
