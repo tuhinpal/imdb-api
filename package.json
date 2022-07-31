@@ -1,5 +1,5 @@
 {
-  "private": true,
+
   "name": "imdb-api",
   "version": "1.0.0",
   "description": "Serverless IMDB API powered by Cloudflare Worker",
