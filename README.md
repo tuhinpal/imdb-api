@@ -7,6 +7,7 @@
 - Cacheable Result
 - High Performance
 - Get episode information
+- Get all reviews with full pagination supported
 
 ## Installation 📦
 
@@ -28,6 +29,7 @@ Installation is pretty easy and straight forward. Click the button below to get 
 
 - `/search?query={query}` for search by title - **[Try It](https://imdb-api.tprojects.workers.dev/search?query=Little%20Things)**
 - `/title/{imdb_id}` get details of a title - **[Try It](https://imdb-api.tprojects.workers.dev/title/tt6522580)**
+- `/reviews/{imdb_id}?option={helpfulness|date|votes|rating}&sortOrder={asc|desc}` get reviews of a title - **[Try It](https://imdb-api.tprojects.workers.dev/reviews/tt6522580?option=date&sortOrder=desc)**
 
 ## License 🎯
 

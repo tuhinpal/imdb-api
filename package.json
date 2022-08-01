@@ -5,7 +5,7 @@
   "description": "Serverless IMDB API powered by Cloudflare Worker",
   "main": "src/index.js",
   "scripts": {
-    "dev": "miniflare --watch --debug --kv CACHE --kv-persist",
+    "dev": "miniflare --watch --debug --kv CACHE --kv-persist --port 3000",
     "publish": "wrangler publish",
     "test": "jest"
   },
