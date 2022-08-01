@@ -128,9 +128,8 @@ reviews.get("/:id", async (c) => {
           review.helpfulNess = {
             votes: parseInt(match[1]),
             votedAsHelpful: parseInt(match[0]),
-            votedAsHelpfulPercentage: Math.round(
-              (parseInt(match[0]) / parseInt(match[1])) * 100
-            ),
+            votedAsHelpfulPercentage:
+              Math.round((parseInt(match[0]) / parseInt(match[1])) * 100) || 0,
           };
         } catch (_) {
           review.helpfulNess = {
