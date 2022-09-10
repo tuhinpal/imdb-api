@@ -52,6 +52,7 @@ export default async function seriesFetcher(id) {
       })
     );
 
+    seasons = seasons.filter((s) => s.episodes.length);
     seasons = seasons.map((s) => {
       delete s.isSelected;
       return s;
@@ -127,6 +128,12 @@ function parseEpisodes(raw, seasonId) {
         count = count.replace(/[(]|[)]|,|[.]/g, "");
         count = parseInt(count);
       } catch (_) {}
+
+      if (
+        image.includes(`spinning-progress.gif`) &&
+        plot.includes("Know what this is about")
+      )
+        return null;
 
       episodes.push({
         idx: index + 1,

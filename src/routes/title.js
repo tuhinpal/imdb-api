@@ -38,6 +38,9 @@ title.get("/:id", async (c) => {
     // id
     response.id = id;
 
+    // review
+    response.review_api_path = `/reviews/${id}`;
+
     // imdb link
     response.imdb = `https://www.imdb.com/title/${id}`;
 
