@@ -1,14 +1,15 @@
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
+import apiRequestRawHtml from "./apiRequestRawHtml";
 
 export default async function seriesFetcher(id) {
   let seasons = [];
 
   try {
     let parser = new DomParser();
-    let rawHtml = await (
-      await fetch(`https://www.imdb.com/title/${id}/episodes/_ajax`)
-    ).text();
+    let rawHtml = await apiRequestRawHtml(
+      `https://www.imdb.com/title/${id}/episodes/_ajax`
+    );
     let dom = parser.parseFromString(rawHtml);
 
     let seasonOption = dom.getElementById("bySeason");
@@ -36,11 +37,9 @@ export default async function seriesFetcher(id) {
           if (season.isSelected) {
             html = rawHtml;
           } else {
-            html = await (
-              await fetch(
-                `https://www.imdb.com/title/${id}/episodes/_ajax?season=${season.id}`
-              )
-            ).text();
+            html = await apiRequestRawHtml(
+              `https://www.imdb.com/title/${id}/episodes/_ajax?season=${season.id}`
+            );
           }
 
           let parsed = parseEpisodes(html, season.id);

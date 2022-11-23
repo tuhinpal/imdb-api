@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
 import config from "../../config";
+import apiRequestRawHtml from "../helpers/apiRequestRawHtml";
 const reviews = new Hono();
 
 reviews.use("/:id", async (c, next) => {
@@ -46,13 +47,11 @@ reviews.get("/:id", async (c) => {
     let reviews = [];
 
     let parser = new DomParser();
-    let rawHtml = await (
-      await fetch(
-        `https://www.imdb.com/title/${id}/reviews/_ajax?sort=${
-          option.key
-        }&dir=${sortOrder}${nextKey ? `&paginationKey=${nextKey}` : ""}`
-      )
-    ).text();
+    let rawHtml = await apiRequestRawHtml(
+      `https://www.imdb.com/title/${id}/reviews/_ajax?sort=${
+        option.key
+      }&dir=${sortOrder}${nextKey ? `&paginationKey=${nextKey}` : ""}`
+    );
     let dom = parser.parseFromString(rawHtml);
 
     let item = dom.getElementsByClassName("imdb-user-review");

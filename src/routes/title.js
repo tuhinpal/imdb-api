@@ -3,6 +3,7 @@ import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
 import config from "../../config";
 import seriesFetcher from "../helpers/seriesFetcher";
+import apiRequestRawHtml from "../helpers/apiRequestRawHtml";
 const title = new Hono();
 
 title.use("/:id", async (c, next) => {
@@ -24,9 +25,8 @@ title.get("/:id", async (c) => {
 
   try {
     let parser = new DomParser();
-    let rawHtml = await (
-      await fetch(`https://www.imdb.com/title/${id}`)
-    ).text();
+    let rawHtml = await apiRequestRawHtml(`https://www.imdb.com/title/${id}`);
+
     let dom = parser.parseFromString(rawHtml);
 
     let response = {};

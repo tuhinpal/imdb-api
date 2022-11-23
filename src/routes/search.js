@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
 import config from "../../config";
+import apiRequestRawHtml from "../helpers/apiRequestRawHtml";
 
 const search = new Hono();
 
@@ -27,11 +28,9 @@ search.get("/", async (c) => {
     if (!query) throw new Error("Query param is required");
 
     let parser = new DomParser();
-    let rawHtml = await (
-      await fetch(
-        `https://www.imdb.com/find?s=tt&q=${query.split(" ").join("+")}`
-      )
-    ).text();
+    let rawHtml = await apiRequestRawHtml(
+      `https://www.imdb.com/find?s=tt&q=${query.split(" ").join("+")}`
+    );
 
     let dom = parser.parseFromString(rawHtml);
 
