@@ -29,7 +29,7 @@ search.get("/", async (c) => {
 
     let parser = new DomParser();
     let rawHtml = await apiRequestRawHtml(
-      `https://www.imdb.com/find?s=tt&q=${query.split(" ").join("+")}`
+      `https://www.imdb.com/find?&q=${query.split(" ").join("+")}`
     );
 
     let dom = parser.parseFromString(rawHtml);
