@@ -21,19 +21,11 @@ export default async function cache(c, next) {
 
     if (c.res.status === 200 && !config.cacheDisabled) {
       c.res.headers.append("Cache-Control", `public, max-age=${getCacheTTL()}`);
-      const response = c.res.clone();
-      await cache.put(key, response);
+      await cache.put(key, c.res.clone());
     }
 
     return;
   } else {
-    let newResponse = response.clone();
-    // remove all headers
-    newResponse.headers.forEach((value, key) => {
-      if (key.startsWith("x-") || key.startsWith("cf-"))
-        newResponse.headers.delete(key);
-    });
-
-    return newResponse;
+    return c.json(await response.json());
   }
 }
