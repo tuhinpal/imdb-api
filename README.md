@@ -1,5 +1,7 @@
 ![IMDB API](https://user-images.githubusercontent.com/51857187/170807293-a52d8141-f743-4501-82e5-55e3d4286e61.jpg)
 
+📖 **Note**: Please update the API URL from `imdb-api.tprojects.workers.dev` to `imdb-api.projects.thetuhin.com`. If you anticipate sending a large number of requests, it is recommended that you deploy your own Cloudflare worker. Note that `imdb-api.tprojects.workers.dev` will soon have a `301` redirect in place.
+
 ## Features 🪶
 
 - Search titles
