@@ -5,17 +5,11 @@ import reviews from "./routes/reviews";
 import title from "./routes/title";
 import cache from "./helpers/cache";
 import search from "./routes/search";
-import config from "../config";
 
 const app = new Hono();
 
 app.use("*", cors());
-app.use(
-  "*",
-  cache({
-    cacheControl: `public, max-age=${config.cacheTtl}`,
-  })
-);
+app.use("*", cache);
 
 app.route("/search", search);
 app.route("/title", title);

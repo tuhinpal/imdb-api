@@ -1,24 +1,33 @@
 import config from "../../config";
 
-export default function cache({ cacheControl = "" } = {}) {
-  return async (c, next) => {
-    const key = c.req.url;
-    const cache = await caches.default;
-    const response = await cache.match(key);
+export default async function cache(c, next) {
+  const key = c.req.url;
+  const cache = await caches.default;
+  const response = await cache.match(key);
 
-    if (!response) {
-      await next();
+  function getCacheTTL() {
+    try {
+      let url = key.toString().toLowerCase();
+      if (url.includes("/reviews")) return 60 * 60 * 24;
+      if (url.includes("/title")) return 60 * 60 * 24;
+      if (url.includes("/search")) return 60 * 60 * 24 * 2;
+    } catch (_) {}
 
-      if (c.res.status === 200 && !config.cacheDisabled) {
-        if (cacheControl) c.res.headers.append("Cache-Control", cacheControl);
-        const response = c.res.clone();
-        await cache.put(key, response);
-      }
+    return 86400;
+  }
 
-      return;
-    } else {
-      c.res = response.clone();
-      return;
+  if (!response) {
+    await next();
+
+    if (c.res.status === 200 && !config.cacheDisabled) {
+      c.res.headers.append("Cache-Control", `public, max-age=${getCacheTTL()}`);
+      const response = c.res.clone();
+      await cache.put(key, response);
     }
-  };
+
+    return;
+  } else {
+    c.res = response.clone();
+    return;
+  }
 }
