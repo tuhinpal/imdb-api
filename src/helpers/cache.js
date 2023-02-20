@@ -27,6 +27,13 @@ export default async function cache(c, next) {
 
     return;
   } else {
-    return response;
+    let newResponse = response.clone();
+    // remove all headers
+    newResponse.headers.forEach((value, key) => {
+      if (key.startsWith("x-") || key.startsWith("cf-"))
+        newResponse.headers.delete(key);
+    });
+
+    return newResponse;
   }
 }
