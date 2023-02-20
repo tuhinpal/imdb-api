@@ -26,6 +26,11 @@ export default async function cache(c, next) {
 
     return;
   } else {
+    // it was throwing Immutable error
+    for (let [key, value] of response.headers.entries()) {
+      c.res.headers.set(key, value);
+    }
+
     return c.json(await response.json());
   }
 }
