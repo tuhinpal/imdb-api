@@ -27,7 +27,6 @@ export default async function cache(c, next) {
 
     return;
   } else {
-    c.res = response.clone();
-    return;
+    return response.clone();
   }
 }
