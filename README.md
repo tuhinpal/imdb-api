@@ -23,9 +23,9 @@ After deployed, map the qorker with a Domain Name to configure cache.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/12162111-12f08f8e-a76b-4cf4-a7b9-17cb9f95dd82?action=collection%2Ffork&collection-url=entityId%3D12162111-12f08f8e-a76b-4cf4-a7b9-17cb9f95dd82%26entityType%3Dcollection%26workspaceId%3Df96b67fc-548b-4248-af81-f654c97a867f)
 
-- `/search?query={query}` for search by title - **[Try It](https://imdb-api.tprojects.workers.dev/search?query=Little%20Things)**
-- `/title/{imdb_id}` get details of a title - **[Try It](https://imdb-api.tprojects.workers.dev/title/tt6522580)**
-- `/reviews/{imdb_id}?option={helpfulness|date|votes|rating}&sortOrder={asc|desc}` get reviews of a title - **[Try It](https://imdb-api.tprojects.workers.dev/reviews/tt6522580?option=date&sortOrder=desc)**
+- `/search?query={query}` for search by title - **[Try It](https://imdb-api.projects.thetuhin.com/search?query=Little%20Things)**
+- `/title/{imdb_id}` get details of a title - **[Try It](https://imdb-api.projects.thetuhin.com/title/tt6522580)**
+- `/reviews/{imdb_id}?option={helpfulness|date|votes|rating}&sortOrder={asc|desc}` get reviews of a title - **[Try It](https://imdb-api.projects.thetuhin.com/reviews/tt6522580?option=date&sortOrder=desc)**
 
 ## License 🎯
 
