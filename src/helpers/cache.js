@@ -27,9 +27,6 @@ export default async function cache(c, next) {
 
     return;
   } else {
-    let newResponse = response.clone();
-    newResponse.headers.append("X-Cache", "HIT");
-    c.res = newResponse;
-    return c.res;
+    return response;
   }
 }
