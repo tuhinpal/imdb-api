@@ -15,13 +15,7 @@ Installation is pretty easy and straight forward. Click the button below to get 
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tuhinpal/imdb-api)
 
-- After deployed Open [Cloudflare Worker](https://workers.cloudflare.com "Cloudflare Worker") Page
-- Click on KV
-- In `Namespace Name` section Type a Name & Click on `Add`, a namespace will created.
-- Now go back to worker main page, here you will see that your created worker listed there, click on that.
-- Click on `Settings` > `Variables`
-- In `KV Namespace Bindings` section click on `Add Binding`
-- Write `CACHE` in Variable name & select your recently created Namespace for KV namespace.
+After deployed, map the qorker with a Domain Name to configure cache.
 
 ## API 📡
 
