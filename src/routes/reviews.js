@@ -1,34 +1,8 @@
 import { Hono } from "hono";
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
-import config from "../../config";
 import apiRequestRawHtml from "../helpers/apiRequestRawHtml";
 const reviews = new Hono();
-
-reviews.use("/:id", async (c, next) => {
-  try {
-    let id = c.req.param("id");
-    let option = c.req.query("option");
-    let sortOrder = c.req.query("sortOrder");
-    let nextKey = c.req.query("nextKey");
-    let cacheId = createCacheId({ id, option, sortOrder, nextKey });
-    c.header("x-cacheid", cacheId);
-
-    let get = await CACHE.get(cacheId);
-    if (get) {
-      c.header("x-cache", "HIT");
-      return c.json(JSON.parse(get));
-    }
-  } catch (_) {}
-
-  await next();
-  c.header("x-cache", "MISS");
-});
-
-function createCacheId({ id, option, sortOrder, nextKey }) {
-  if (!nextKey) nextKey = "";
-  return `review~${id}~${option}~${sortOrder}~${nextKey}`;
-}
 
 reviews.get("/:id", async (c) => {
   try {
@@ -162,23 +136,6 @@ reviews.get("/:id", async (c) => {
       reviews,
       next_api_path: next,
     };
-
-    try {
-      if (!config.cacheDisabled) {
-        await CACHE.put(
-          createCacheId({
-            id,
-            option: option.name,
-            sortOrder,
-            nextKey: nextKey,
-          }),
-          JSON.stringify(result),
-          {
-            expirationTtl: 21600,
-          }
-        );
-      }
-    } catch (_) {}
 
     return c.json(result);
   } catch (error) {

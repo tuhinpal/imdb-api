@@ -6,20 +6,6 @@ import seriesFetcher from "../helpers/seriesFetcher";
 import apiRequestRawHtml from "../helpers/apiRequestRawHtml";
 const title = new Hono();
 
-title.use("/:id", async (c, next) => {
-  const id = c.req.param("id");
-
-  try {
-    let get = await CACHE.get(id);
-    if (get) {
-      c.header("x-cache", "HIT");
-      return c.json(JSON.parse(get));
-    }
-  } catch (_) {}
-  await next();
-  c.header("x-cache", "MISS");
-});
-
 title.get("/:id", async (c) => {
   const id = c.req.param("id");
 
@@ -123,12 +109,6 @@ title.get("/:id", async (c) => {
         response.seasons = seasons;
       }
     } catch (error) {}
-
-    if (!config.cacheDisabled) {
-      try {
-        await CACHE.put(id, JSON.stringify(response), { expirationTtl: 86400 });
-      } catch (_) {}
-    }
 
     return c.json(response);
   } catch (error) {
