@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
-import config from "../../config";
 import seriesFetcher from "../helpers/seriesFetcher";
 import apiRequestRawHtml from "../helpers/apiRequestRawHtml";
+import parseMoreInfo from "../helpers/parseMoreInfo";
 const title = new Hono();
 
 title.get("/:id", async (c) => {
@@ -15,6 +15,7 @@ title.get("/:id", async (c) => {
 
     let dom = parser.parseFromString(rawHtml);
 
+    let moreDetails = parseMoreInfo(dom);
     let response = {};
 
     // schema parse
@@ -33,12 +34,16 @@ title.get("/:id", async (c) => {
     // content type
     response.contentType = schema["@type"];
 
+    // production status
+    response.productionStatus = moreDetails.productionStatus;
+
     // title
     // response.title = getNode(dom, "h1", "hero-title-block__title").innerHTML;
     response.title = entityDecoder(schema.name, { level: "html5" });
 
     // image
     response.image = schema.image;
+    response.images = moreDetails.images;
 
     // plot
     // response.plot = getNode(dom, "span", "plot-l").innerHTML;
@@ -49,6 +54,9 @@ title.get("/:id", async (c) => {
       count: schema.aggregateRating.ratingCount,
       star: schema.aggregateRating.ratingValue,
     };
+
+    // award
+    response.award = moreDetails.award;
 
     // content rating
     response.contentRating = schema.contentRating;
@@ -69,6 +77,14 @@ title.get("/:id", async (c) => {
       if (!response.year) response.year = null;
       response.runtime = null;
     }
+
+    // Relesde detail, laguages, fliming locations
+    response.releaseDeatiled = moreDetails.releaseDeatiled;
+    if (!response.year && response.releaseDeatiled.year !== -1)
+      response.year = response.releaseDeatiled.year;
+    response.spokenLanguages = moreDetails.spokenLanguages;
+    response.filmingLocations = moreDetails.filmingLocations;
+
     // actors
     try {
       response.actors = schema.actor.map((e) =>

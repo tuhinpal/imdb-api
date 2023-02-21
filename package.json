@@ -16,7 +16,7 @@
     "@cloudflare/wrangler": "^1.19.12",
     "axios": "^0.27.2",
     "jest": "^28.1.0",
-    "miniflare": "^2.8.2"
+    "miniflare": "^2.12.1"
   },
   "dependencies": {
     "dom-parser": "^0.1.6",
