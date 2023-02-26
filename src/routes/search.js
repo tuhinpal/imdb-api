@@ -62,10 +62,16 @@ search.get("/", async (c) => {
 
     return c.json(response);
   } catch (error) {
+    c.status(500);
+    let errorMessage = error.message;
+    if (error.message.includes("Too many"))
+      errorMessage =
+        "Too many requests error from IMDB, please try again later";
+
     return c.json({
       query: null,
       results: [],
-      message: error.message,
+      message: errorMessage,
     });
   }
 });
