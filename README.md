@@ -1,6 +1,6 @@
 ![IMDB API](https://user-images.githubusercontent.com/51857187/170807293-a52d8141-f743-4501-82e5-55e3d4286e61.jpg)
 
-📖 **Note**: Please update the API URL from `imdb-api.tprojects.workers.dev` to `imdb-api.projects.thetuhin.com`. If you anticipate sending a large number of requests, it is recommended that you deploy your own Cloudflare worker. Note that `imdb-api.tprojects.workers.dev` will soon have a `301` redirect in place (effective date 26-02-2023).
+📖 **Note**: `imdb-api.tprojects.workers.dev` is redirected to `imdb-api.tprojects.workers.dev`. Please update your api url to improve latency.
 
 ## Features 🪶
 
@@ -13,7 +13,7 @@
 
 ## Installation 📦
 
-Installation is pretty easy and straight forward. Click the button below to get started.
+If you anticipate sending a large number of requests, it is recommended that you deploy your own Cloudflare worker. Installation is pretty easy and straight forward. Click the button below to get started.
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tuhinpal/imdb-api)
 
