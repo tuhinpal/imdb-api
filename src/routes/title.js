@@ -79,9 +79,17 @@ title.get("/:id", async (c) => {
     }
 
     // Relesde detail, laguages, fliming locations
-    response.releaseDeatiled = moreDetails.releaseDeatiled;
-    if (!response.year && response.releaseDeatiled.year !== -1)
-      response.year = response.releaseDeatiled.year;
+    response.releaseDetailed = moreDetails.releaseDetailed;
+    if (!response.year && response.releaseDetailed.year !== -1)
+      response.year = response.releaseDetailed.year;
+
+    // https://github.com/tuhinpal/imdb-api/issues/17
+    response.releaseDeatiled = {
+      message:
+        "This was a typo. Use 'releaseDetailed' instead. This will be removed in the next major version.",
+      ...response.releaseDetailed,
+    };
+
     response.spokenLanguages = moreDetails.spokenLanguages;
     response.filmingLocations = moreDetails.filmingLocations;
 

@@ -6,7 +6,7 @@ export default function parseMoreInfo(dom) {
     },
     images: [],
     productionStatus: null,
-    releaseDeatiled: {
+    releaseDetailed: {
       day: -1,
       month: -1,
       year: -1,
@@ -41,14 +41,14 @@ export default function parseMoreInfo(dom) {
     } catch (_) {}
 
     try {
-      response.releaseDeatiled.day = allData.releaseDate.day;
-      response.releaseDeatiled.month = allData.releaseDate.month;
-      response.releaseDeatiled.year = allData.releaseDate.year;
-      response.releaseDeatiled.releaseLocation = {
+      response.releaseDetailed.day = allData.releaseDate.day;
+      response.releaseDetailed.month = allData.releaseDate.month;
+      response.releaseDetailed.year = allData.releaseDate.year;
+      response.releaseDetailed.releaseLocation = {
         country: allData.releaseDate.country.text,
         cca2: allData.releaseDate.country.id,
       };
-      response.releaseDeatiled.originLocations =
+      response.releaseDetailed.originLocations =
         allData.countriesOfOrigin.countries.map((e) => ({
           country: e.text,
           cca2: e.id,
