@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
-import seriesFetcher from "../helpers/seriesFetcher";
+import seriesFetcher, { parseEpisodes } from "../helpers/seriesFetcher";
 import apiRequestRawHtml from "../helpers/apiRequestRawHtml";
 import parseMoreInfo from "../helpers/parseMoreInfo";
 const title = new Hono();
@@ -130,9 +130,39 @@ title.get("/:id", async (c) => {
     try {
       if (["TVSeries"].includes(response.contentType)) {
         let seasons = await seriesFetcher(id);
-        response.seasons = seasons;
+        response.seasons = seasons.seasons;
+        response.all_seasons = seasons.all_seasons;
       }
     } catch (error) {}
+
+    return c.json(response);
+  } catch (error) {
+    c.status(500);
+    return c.json({
+      message: error.message,
+    });
+  }
+});
+
+title.get("/:id/season/:seasonId", async (c) => {
+  const id = c.req.param("id");
+  const seasonId = c.req.param("seasonId");
+
+  try {
+    const html = await apiRequestRawHtml(
+      `https://www.imdb.com/title/${id}/episodes/_ajax?season=${seasonId}`
+    );
+
+    const parsed = parseEpisodes(html, seasonId);
+    const response = Object.assign(
+      {
+        id,
+        title_api_path: `/title/${id}`,
+        imdb: `https://www.imdb.com/title/${id}/episodes?season=${seasonId}`,
+        season_id: seasonId,
+      },
+      parsed
+    );
 
     return c.json(response);
   } catch (error) {
