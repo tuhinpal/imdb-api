@@ -6,7 +6,7 @@ export default function parseMoreInfo(dom) {
     },
     images: [],
     productionStatus: null,
-    releaseDeatiled: {
+    releaseDetailed: {
       day: -1,
       month: -1,
       year: -1,
@@ -18,6 +18,8 @@ export default function parseMoreInfo(dom) {
     },
     spokenLanguages: [], // { language: null, id: null }
     filmingLocations: [],
+    runtime: "",
+    runtimeSeconds: 0,
   }; // ensure type
 
   try {
@@ -41,14 +43,14 @@ export default function parseMoreInfo(dom) {
     } catch (_) {}
 
     try {
-      response.releaseDeatiled.day = allData.releaseDate.day;
-      response.releaseDeatiled.month = allData.releaseDate.month;
-      response.releaseDeatiled.year = allData.releaseDate.year;
-      response.releaseDeatiled.releaseLocation = {
+      response.releaseDetailed.day = allData.releaseDate.day;
+      response.releaseDetailed.month = allData.releaseDate.month;
+      response.releaseDetailed.year = allData.releaseDate.year;
+      response.releaseDetailed.releaseLocation = {
         country: allData.releaseDate.country.text,
         cca2: allData.releaseDate.country.id,
       };
-      response.releaseDeatiled.originLocations =
+      response.releaseDetailed.originLocations =
         allData.countriesOfOrigin.countries.map((e) => ({
           country: e.text,
           cca2: e.id,
@@ -69,9 +71,28 @@ export default function parseMoreInfo(dom) {
         (e) => e.node.text
       );
     } catch (_) {}
+
+    try {
+      response.runtime = parseSecondToTime(allData.runtime.seconds);
+      response.runtimeSeconds = allData.runtime.seconds;
+    } catch (_) {}
   } catch (error) {
     console.log(`ParseMoreInfo error:`, error);
   }
 
   return response;
+}
+
+function parseSecondToTime(seconds) {
+  let hours = Math.floor(seconds / 3600);
+  let minutes = Math.floor((seconds - hours * 3600) / 60);
+  let second = seconds - hours * 3600 - minutes * 60;
+
+  let result = "";
+  if (hours > 0) result += hours + "h ";
+
+  if (minutes > 0) result += minutes + "m ";
+  if (second > 0) result += second + "s";
+
+  return result.trim();
 }

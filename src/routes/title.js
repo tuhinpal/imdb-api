@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
-import seriesFetcher from "../helpers/seriesFetcher";
+import seriesFetcher, { parseEpisodes } from "../helpers/seriesFetcher";
 import apiRequestRawHtml from "../helpers/apiRequestRawHtml";
 import parseMoreInfo from "../helpers/parseMoreInfo";
 const title = new Hono();
@@ -66,24 +66,23 @@ title.get("/:id", async (c) => {
       entityDecoder(e, { level: "html5" })
     );
 
-    // year and runtime
-    try {
-      let metadata = getNode(dom, "ul", "hero-title-block__metadata");
-      response.year = metadata.firstChild.firstChild.innerHTML;
-      response.runtime = metadata.lastChild.innerHTML
-        .split("<!-- -->")
-        .join("");
-    } catch (_) {
-      if (!response.year) response.year = null;
-      response.runtime = null;
-    }
-
     // Relesde detail, laguages, fliming locations
-    response.releaseDeatiled = moreDetails.releaseDeatiled;
-    if (!response.year && response.releaseDeatiled.year !== -1)
-      response.year = response.releaseDeatiled.year;
+    response.releaseDetailed = moreDetails.releaseDetailed;
+    if (!response.year && response.releaseDetailed.year !== -1)
+      response.year = response.releaseDetailed.year;
+
+    // https://github.com/tuhinpal/imdb-api/issues/17
+    response.releaseDeatiled = {
+      message:
+        "This was a typo. Use 'releaseDetailed' instead. This will be removed in the next major version.",
+      ...response.releaseDetailed,
+    };
+
+    response.year = response.releaseDetailed.year;
     response.spokenLanguages = moreDetails.spokenLanguages;
     response.filmingLocations = moreDetails.filmingLocations;
+    response.runtime = moreDetails.runtime;
+    response.runtimeSeconds = moreDetails.runtimeSeconds;
 
     // actors
     try {
@@ -122,9 +121,39 @@ title.get("/:id", async (c) => {
     try {
       if (["TVSeries"].includes(response.contentType)) {
         let seasons = await seriesFetcher(id);
-        response.seasons = seasons;
+        response.seasons = seasons.seasons;
+        response.all_seasons = seasons.all_seasons;
       }
     } catch (error) {}
+
+    return c.json(response);
+  } catch (error) {
+    c.status(500);
+    return c.json({
+      message: error.message,
+    });
+  }
+});
+
+title.get("/:id/season/:seasonId", async (c) => {
+  const id = c.req.param("id");
+  const seasonId = c.req.param("seasonId");
+
+  try {
+    const html = await apiRequestRawHtml(
+      `https://www.imdb.com/title/${id}/episodes/_ajax?season=${seasonId}`
+    );
+
+    const parsed = parseEpisodes(html, seasonId);
+    const response = Object.assign(
+      {
+        id,
+        title_api_path: `/title/${id}`,
+        imdb: `https://www.imdb.com/title/${id}/episodes?season=${seasonId}`,
+        season_id: seasonId,
+      },
+      parsed
+    );
 
     return c.json(response);
   } catch (error) {

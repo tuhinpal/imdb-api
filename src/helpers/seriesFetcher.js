@@ -2,7 +2,10 @@ import DomParser from "dom-parser";
 import { decode as entityDecoder } from "html-entities";
 import apiRequestRawHtml from "./apiRequestRawHtml";
 
+const MAX_SEASONS = 2;
+
 export default async function seriesFetcher(id) {
+  let allSeasons = [];
   let seasons = [];
 
   try {
@@ -16,8 +19,10 @@ export default async function seriesFetcher(id) {
     let seasonOptions = seasonOption.getElementsByTagName("option");
     for (let i = 0; i < seasonOptions.length; i++) {
       try {
+        const seasonId = seasonOptions[i].getAttribute("value");
         let season = {
-          id: seasonOptions[i].getAttribute("value"),
+          id: seasonId,
+          api_path: `/title/${id}/season/${seasonId}`,
           isSelected: seasonOptions[i].getAttribute("selected") === "selected",
           name: "",
           episodes: [],
@@ -26,9 +31,9 @@ export default async function seriesFetcher(id) {
       } catch (_) {}
     }
 
-    // take last 15 seasons
+    allSeasons = [...seasons];
     seasons = seasons.reverse();
-    seasons = seasons.slice(0, 15);
+    seasons = seasons.slice(0, MAX_SEASONS);
 
     await Promise.all(
       seasons.map(async (season) => {
@@ -58,10 +63,17 @@ export default async function seriesFetcher(id) {
     });
   } catch (error) {}
 
-  return seasons;
+  return {
+    all_seasons: allSeasons.map((s) => ({
+      id: s.id,
+      name: `Season ${s.id}`,
+      api_path: `/title/${id}/season/${s.id}`,
+    })),
+    seasons,
+  };
 }
 
-function parseEpisodes(raw, seasonId) {
+export function parseEpisodes(raw, seasonId) {
   let parser = new DomParser();
   let dom = parser.parseFromString(raw);
 
