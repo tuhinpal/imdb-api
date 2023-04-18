@@ -66,18 +66,6 @@ title.get("/:id", async (c) => {
       entityDecoder(e, { level: "html5" })
     );
 
-    // year and runtime
-    try {
-      let metadata = getNode(dom, "ul", "hero-title-block__metadata");
-      response.year = metadata.firstChild.firstChild.innerHTML;
-      response.runtime = metadata.lastChild.innerHTML
-        .split("<!-- -->")
-        .join("");
-    } catch (_) {
-      if (!response.year) response.year = null;
-      response.runtime = null;
-    }
-
     // Relesde detail, laguages, fliming locations
     response.releaseDetailed = moreDetails.releaseDetailed;
     if (!response.year && response.releaseDetailed.year !== -1)
@@ -90,8 +78,11 @@ title.get("/:id", async (c) => {
       ...response.releaseDetailed,
     };
 
+    response.year = response.releaseDetailed.year;
     response.spokenLanguages = moreDetails.spokenLanguages;
     response.filmingLocations = moreDetails.filmingLocations;
+    response.runtime = moreDetails.runtime;
+    response.runtimeSeconds = moreDetails.runtimeSeconds;
 
     // actors
     try {
