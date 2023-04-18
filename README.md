@@ -38,6 +38,7 @@ After deployed, map the qorker with a Domain Name to configure cache.
 - `/search?query={query}` for search by title - **[Try It](https://imdb-api.projects.thetuhin.com/search?query=Little%20Things)**
 - `/title/{imdb_id}` get details of a title - **[Try It](https://imdb-api.projects.thetuhin.com/title/tt6522580)**
 - `/reviews/{imdb_id}?option={helpfulness|date|votes|rating}&sortOrder={asc|desc}` get reviews of a title - **[Try It](https://imdb-api.projects.thetuhin.com/reviews/tt6522580?option=date&sortOrder=desc)**
+- `/title/{imdb_id}/season/{season_id}` fetch single season of a series - **[Try It](https://imdb-api.projects.thetuhin.com/title/tt6522580/season/4)**
 
 ## License 🎯
 
