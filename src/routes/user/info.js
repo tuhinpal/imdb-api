@@ -1,8 +1,6 @@
-import { Hono } from "hono";
 import DomParser from "dom-parser";
-const userInfo = new Hono();
 
-userInfo.get("/:id", async (c) => {
+export default async function userInfo(c) {
   let errorStatus = 500;
 
   try {
@@ -82,6 +80,7 @@ userInfo.get("/:id", async (c) => {
       {
         id: userId,
         imdb: `https://www.imdb.com/user/${userId}`,
+        ratings_api_path: `/user/${userId}/ratings`,
       },
       data
     );
@@ -93,6 +92,4 @@ userInfo.get("/:id", async (c) => {
       message: error.message,
     });
   }
-});
-
-export default userInfo;
+}
