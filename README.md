@@ -42,7 +42,7 @@ After deployed, map the qorker with a Domain Name to configure cache.
 | `/reviews/{imdb_id}?option={helpfulness\|date\|votes\|rating}&sortOrder={asc\|desc}`             | GET    | Get reviews of a title                  | [Try It](https://imdb-api.projects.thetuhin.com/reviews/tt6522580?option=date&sortOrder=desc) |
 | `/title/{imdb_id}/season/{season_id}`                                                            | GET    | (New) Fetch a single season of a series | [Try It](https://imdb-api.projects.thetuhin.com/title/tt6522580/season/4)                     |
 | `/user/{user_id}`                                                                                | GET    | (Beta) Fetch an user's info             | [Try It](https://imdb-api.projects.thetuhin.com/user/ur82525142)                              |
-| `/user/{user_id}/ratings?ratingFilter={1-10}&sort={most_recent\|oldest\|top_rated\|worst_rated}` | GET    | (Beta) Fetch an user's rating           | [Try It](https://imdb-api.projects.thetuhin.com/user/ur82525142)                              |
+| `/user/{user_id}/ratings?ratingFilter={1-10}&sort={most_recent\|oldest\|top_rated\|worst_rated}` | GET    | (Beta) Fetch an user's rating           | [Try It](https://imdb-api.projects.thetuhin.com/user/ur82525142/ratings)                      |
 
 ## License 🎯
 
