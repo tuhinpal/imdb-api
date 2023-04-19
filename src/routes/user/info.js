@@ -1,8 +1,6 @@
-import { Hono } from "hono";
 import DomParser from "dom-parser";
-const userInfo = new Hono();
 
-userInfo.get("/:id", async (c) => {
+export default async function userInfo(c) {
   let errorStatus = 500;
 
   try {
@@ -32,27 +30,30 @@ userInfo.get("/:id", async (c) => {
     let data = {};
 
     try {
-      let header = dom.getElementsByClassName("header")[0];
+      const name = rawHtml.match(/<h1>(.*)<\/h1>/)[1];
+      data.name = name || null;
+    } catch (__) {
+      data.name = null;
+    }
 
-      try {
-        let name = header.getElementsByTagName("h1")[0];
-        data.name = name.textContent || null;
-      } catch (__) {
-        data.name = null;
-      }
-
-      try {
-        let created = header.getElementsByClassName("timestamp")[0];
-        data.created = created.textContent || null;
-      } catch (__) {
-        data.created = null;
-      }
-    } catch (_) {}
+    try {
+      const created = rawHtml.match(
+        /<div class="timestamp">IMDb member since (.*)<\/div>/
+      )[1];
+      data.member_since = created || null;
+    } catch (__) {
+      data.created = null;
+    }
 
     try {
       let image = dom.getElementById("avatar");
-      console.log(image);
-      data.image = image.src || null;
+      const imageSrc = image.getAttribute("src");
+
+      if (imageSrc) {
+        data.image = imageSrc.replace("._V1_SY100_SX100_", "");
+      } else {
+        data.image = null;
+      }
     } catch (__) {
       data.image = null;
     }
@@ -75,17 +76,20 @@ userInfo.get("/:id", async (c) => {
       data.badges = [];
     }
 
-    return c.json({
-      userId,
-      message: "User info fetched successfully.",
-      data,
-    });
+    const result = Object.assign(
+      {
+        id: userId,
+        imdb: `https://www.imdb.com/user/${userId}`,
+        ratings_api_path: `/user/${userId}/ratings`,
+      },
+      data
+    );
+
+    return c.json(result);
   } catch (error) {
     c.status(errorStatus);
     return c.json({
       message: error.message,
     });
   }
-});
-
-export default userInfo;
+}
