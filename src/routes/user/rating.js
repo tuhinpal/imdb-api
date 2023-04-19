@@ -65,12 +65,14 @@ export default async function userRating(c) {
 
     try {
       const listNode = dom.getElementById("ratings-container");
-      const lists = listNode.getElementsByClassName("mode-detail");
+      const lists = listNode
+        .getElementsByClassName("mode-detail")
+        .slice(0, 100); // limit to 100
 
-      lists.forEach((node) => {
+      for (const node of lists) {
         const parsed = parseContent(node);
         if (parsed) all_ratings.push(parsed);
-      });
+      }
     } catch (_) {}
 
     const result = {
