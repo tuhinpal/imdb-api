@@ -57,6 +57,13 @@ reviews.get("/:id", async (c) => {
         }
 
         try {
+          review.user_api_path =
+            "/user/" + review.authorUrl.match(/\/user\/(.*)\//)[1];
+        } catch (error) {
+          review.user_api_path = null;
+        }
+
+        try {
           let reviewDate = node.getElementsByClassName("review-date")[0];
           review.date = reviewDate.textContent.trim();
         } catch (error) {
