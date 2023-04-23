@@ -65,9 +65,10 @@ reviews.get("/:id", async (c) => {
 
         try {
           let reviewDate = node.getElementsByClassName("review-date")[0];
-          review.date = reviewDate.textContent.trim();
+          reviewDate = reviewDate.textContent.trim();
+          review.date = new Date(reviewDate).toISOString();
         } catch (error) {
-          if (!review.date) review.date = null;
+          review.date = null;
         }
 
         try {
