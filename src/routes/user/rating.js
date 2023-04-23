@@ -1,5 +1,6 @@
 import DomParser from "dom-parser";
 import qs from "qs";
+import apiRequestRawHtml from "../../helpers/apiRequestRawHtml";
 
 const SORT_OPTIONS = {
   most_recent: "date_added,desc",
@@ -75,6 +76,19 @@ export default async function userRating(c) {
       }
     } catch (_) {}
 
+    const allReviews = await parseReviews(userId);
+
+    // merge reviews
+    all_ratings = all_ratings.map((rating) => {
+      let review = allReviews.find((review) => review.title_id === rating.id);
+      if (review) delete review.title_id;
+
+      return {
+        ...rating,
+        review: review || null,
+      };
+    });
+
     const result = {
       id: userId,
       imdb: constructedUrl,
@@ -95,6 +109,53 @@ export default async function userRating(c) {
   }
 }
 
+async function parseReviews(userId) {
+  try {
+    let data = [];
+    const rawHtml = await apiRequestRawHtml(
+      `https://www.imdb.com/user/${userId}/reviews`
+    );
+
+    const parser = new DomParser();
+    const dom = parser.parseFromString(rawHtml);
+
+    const allLists = dom.getElementsByClassName("lister-item");
+
+    for (const node of allLists) {
+      try {
+        const id = node.getAttribute("data-review-id");
+        const imdb = node.getAttribute("data-vote-url");
+        const titleId = imdb.match(/title\/(.*)\/review/)[1];
+        const reviewContent =
+          node.getElementsByClassName("show-more__control")[0];
+        const reviewTitle = node.getElementsByClassName("title")[0];
+
+        let review_date = node
+          .getElementsByClassName("review-date")[0]
+          .textContent.trim();
+        review_date = new Date(review_date).toISOString();
+
+        data.push({
+          title_id: titleId,
+
+          id,
+          date: review_date,
+          heading: reviewTitle.textContent.trim(),
+          content: reviewContent.textContent.trim(),
+          reviewLink: `https://www.imdb.com/review/${id}`,
+        });
+      } catch (_) {
+        console.error(`Reviews error:`, _);
+      }
+    }
+
+    return data;
+  } catch (error) {
+    console.error(`Reviews error:`, error);
+    return [];
+  }
+}
+
 function parseContent(node) {
   try {
     let object = {};
@@ -108,6 +169,7 @@ function parseContent(node) {
     object.id = titleId;
     object.imdb = `https://www.imdb.com/title/${titleId}`;
     object.api_path = `/title/${titleId}`;
+    object.review_api_path = `/reviews/${titleId}`;
     object.title = title.textContent.trim();
 
     const userRatingNode = node.getElementsByClassName(
@@ -121,9 +183,9 @@ function parseContent(node) {
 
     try {
       const ratedOn = nodeInnerHtml.match(/>Rated on (.*)<[\/]p>/)[1];
-      object.ratedOn = new Date(ratedOn).toISOString();
+      object.date = new Date(ratedOn).toISOString();
     } catch (error) {
-      object.ratedOn = null;
+      object.date = null;
     }
 
     try {
