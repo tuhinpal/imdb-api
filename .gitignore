@@ -9,3 +9,4 @@ worker/
 node_modules/
 .cargo-ok
 .mf
+.wrangler

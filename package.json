@@ -5,18 +5,17 @@
   "description": "Serverless IMDB API powered by Cloudflare Worker",
   "main": "src/index.js",
   "scripts": {
-    "dev": "miniflare --watch --debug --cache-persist --port 3000",
+    "dev": "wrangler dev src/index.js --port 3000",
     "publish": "wrangler publish",
     "test": "jest",
-    "start": "miniflare --cache-persist --port 3000"
+    "start": "workerd serve"
   },
   "author": "tuhinpal <me@thetuhin.com>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@cloudflare/wrangler": "^1.19.12",
     "axios": "^0.27.2",
     "jest": "^28.1.0",
-    "miniflare": "^2.12.1"
+    "wrangler": "^3.3.0"
   },
   "dependencies": {
     "dom-parser": "^0.1.6",
