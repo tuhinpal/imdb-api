@@ -1,22 +1,22 @@
 {
   "private": true,
   "name": "imdb-api",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Serverless IMDB API powered by Cloudflare Worker",
   "main": "src/index.js",
   "scripts": {
-    "dev": "miniflare --watch --debug --cache-persist --port 3000",
-    "publish": "wrangler publish",
+    "dev": "wrangler dev src/index.js --port 3000",
+    "publish": "wrangler deploy src/index.js",
     "test": "jest",
-    "start": "miniflare --cache-persist --port 3000"
+    "start": "wrangler dev src/index.js --port 3000",
+    "bump": "node scripts/bump-version.js"
   },
   "author": "tuhinpal <me@thetuhin.com>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@cloudflare/wrangler": "^1.19.12",
     "axios": "^0.27.2",
     "jest": "^28.1.0",
-    "miniflare": "^2.12.1"
+    "wrangler": "^3.3.0"
   },
   "dependencies": {
     "dom-parser": "^0.1.6",

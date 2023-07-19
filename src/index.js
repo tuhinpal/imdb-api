@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { cors } from "hono/dist/middleware/cors/index";
+import { cors } from "hono/cors";
 import index from "./routes/index";
 import reviews from "./routes/reviews";
 import title from "./routes/title";
