@@ -51,8 +51,8 @@ title.get("/:id", async (c) => {
 
     // rating
     response.rating = {
-      count: schema.aggregateRating.ratingCount,
-      star: schema.aggregateRating.ratingValue,
+      count: schema.aggregateRating?.ratingCount ?? 0,
+      star: schema.aggregateRating?.ratingValue ?? 0,
     };
 
     // award
@@ -62,21 +62,13 @@ title.get("/:id", async (c) => {
     response.contentRating = schema.contentRating;
 
     // genre
-    response.genre = schema.genre.map((e) =>
-      entityDecoder(e, { level: "html5" })
-    );
+    response.genre =
+      schema.genre?.map((e) => entityDecoder(e, { level: "html5" })) ?? [];
 
     // Relesde detail, laguages, fliming locations
     response.releaseDetailed = moreDetails.releaseDetailed;
     if (!response.year && response.releaseDetailed.year !== -1)
       response.year = response.releaseDetailed.year;
-
-    // https://github.com/tuhinpal/imdb-api/issues/17
-    response.releaseDeatiled = {
-      message:
-        "This was a typo. Use 'releaseDetailed' instead. This will be removed in the next major version.",
-      ...response.releaseDetailed,
-    };
 
     response.year = response.releaseDetailed.year;
     response.spokenLanguages = moreDetails.spokenLanguages;
