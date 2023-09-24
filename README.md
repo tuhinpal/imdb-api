@@ -1,6 +1,6 @@
 ![IMDB API](https://user-images.githubusercontent.com/51857187/170807293-a52d8141-f743-4501-82e5-55e3d4286e61.jpg)
 
-📖 **Note**: `imdb-api.tprojects.workers.dev` is redirected to `imdb-api.tprojects.workers.dev`. Please update your api url to improve latency.
+📖 **Note**: `imdb-api.tprojects.workers.dev` is redirected to `imdb-api.projects.thetuhin.com`. Please update your api url to improve latency.
 
 ## Features 🪶
 
