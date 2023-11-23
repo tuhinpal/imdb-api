@@ -59,7 +59,7 @@ export default async function getTitle(id) {
       wins: props.mainColumnData.wins.total,
       nominations: props.mainColumnData.nominations.total,
     },
-    genres: props.aboveTheFoldData.genres.genres.map((e) => e.id),
+    genre: props.aboveTheFoldData.genres.genres.map((e) => e.id),
     releaseDetailed: {
       date: new Date(
         props.aboveTheFoldData.releaseDate.year,
