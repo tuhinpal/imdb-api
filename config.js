@@ -1,3 +1,3 @@
 export default {
-  cacheDisabled: false,
+  cacheDisabled: true,
 };
