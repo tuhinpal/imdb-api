@@ -1,171 +1,67 @@
 import DomParser from "dom-parser";
-import { decode as entityDecoder } from "html-entities";
 import apiRequestRawHtml from "./apiRequestRawHtml";
 
-const MAX_SEASONS = 2;
-
 export default async function seriesFetcher(id) {
-  let allSeasons = [];
-  let seasons = [];
-
   try {
-    let parser = new DomParser();
-    let rawHtml = await apiRequestRawHtml(
-      `https://www.imdb.com/title/${id}/episodes/_ajax`
-    );
-    let dom = parser.parseFromString(rawHtml);
+    const firstSeason = await getSeason({ id, seasonId: 1 });
 
-    let seasonOption = dom.getElementById("bySeason");
-    let seasonOptions = seasonOption.getElementsByTagName("option");
-    for (let i = 0; i < seasonOptions.length; i++) {
-      try {
-        const seasonId = seasonOptions[i].getAttribute("value");
-        let season = {
-          id: seasonId,
-          api_path: `/title/${id}/season/${seasonId}`,
-          isSelected: seasonOptions[i].getAttribute("selected") === "selected",
-          name: "",
-          episodes: [],
-        };
-        seasons.push(season);
-      } catch (_) {}
-    }
-
-    allSeasons = [...seasons];
-    seasons = seasons.reverse();
-    seasons = seasons.slice(0, MAX_SEASONS);
-
-    await Promise.all(
-      seasons.map(async (season) => {
-        try {
-          let html = "";
-          if (season.isSelected) {
-            html = rawHtml;
-          } else {
-            html = await apiRequestRawHtml(
-              `https://www.imdb.com/title/${id}/episodes/_ajax?season=${season.id}`
-            );
-          }
-
-          let parsed = parseEpisodes(html, season.id);
-          season.name = parsed.name;
-          season.episodes = parsed.episodes;
-        } catch (sfe) {
-          season.error = sfe.toString();
-        }
-      })
-    );
-
-    seasons = seasons.filter((s) => s.episodes.length);
-    seasons = seasons.map((s) => {
-      delete s.isSelected;
-      return s;
-    });
-  } catch (error) {}
-
-  return {
-    all_seasons: allSeasons.map((s) => ({
-      id: s.id,
-      name: `Season ${s.id}`,
-      api_path: `/title/${id}/season/${s.id}`,
-    })),
-    seasons,
-  };
+    return {
+      all_seasons: firstSeason.all_seasons,
+      seasons: [
+        {
+          ...firstSeason,
+          all_seasons: undefined,
+        },
+      ],
+    };
+  } catch (error) {
+    return {
+      all_seasons: [],
+      seasons: [],
+    };
+  }
 }
 
-export function parseEpisodes(raw, seasonId) {
+export async function getSeason({ id, seasonId }) {
+  const html = await apiRequestRawHtml(
+    `https://www.imdb.com/title/${id}/episodes?season=${seasonId}`
+  );
+
   let parser = new DomParser();
-  let dom = parser.parseFromString(raw);
+  let dom = parser.parseFromString(html);
 
-  let name = dom.getElementById("episode_top").textContent.trim();
-  name = entityDecoder(name, { level: "html5" });
+  const nextData = dom.getElementsByAttribute("id", "__NEXT_DATA__");
+  const json = JSON.parse(nextData[0].textContent);
 
-  let episodes = [];
-
-  let item = dom.getElementsByClassName("list_item");
-
-  item.forEach((node, index) => {
-    try {
-      let image = null;
-      let image_large = null;
-      try {
-        image = node.getElementsByTagName("img")[0];
-        image = image.getAttribute("src");
-        image_large = image.replace(/[.]_.*_[.]/, ".");
-      } catch (_) {}
-
-      let noStr = null;
-      try {
-        // noStr = node.getElementsByClassName("image")[0].textContent.trim();
-        noStr = `S${seasonId}, Ep${index + 1}`;
-      } catch (_) {}
-
-      let publishedDate = null;
-      try {
-        publishedDate = node
-          .getElementsByClassName("airdate")[0]
-          .textContent.trim();
-      } catch (_) {}
-
-      let title = null;
-      try {
-        title = node.getElementsByTagName("a");
-        title = title.find((t) => t.getAttribute("itemprop") === "name");
-        title = title.textContent.trim();
-        title = entityDecoder(title, { level: "html5" });
-      } catch (_) {}
-
-      let plot = null;
-      try {
-        plot = node.getElementsByTagName("div");
-        plot = plot.find((t) => t.getAttribute("itemprop") === "description");
-        plot = plot.textContent.trim();
-        plot = entityDecoder(plot, { level: "html5" });
-      } catch (_) {}
-
-      let star = 0;
-      try {
-        star = node
-          .getElementsByClassName("ipl-rating-star__rating")[0]
-          .textContent.trim();
-        star = parseFloat(star);
-      } catch (_) {}
-
-      let count = 0;
-      try {
-        count = node
-          .getElementsByClassName("ipl-rating-star__total-votes")[0]
-          .textContent.trim();
-        count = count.replace(/[(]|[)]|,|[.]/g, "");
-        count = parseInt(count);
-      } catch (_) {}
-
-      if (
-        image.includes(`spinning-progress.gif`) &&
-        plot.includes("Know what this is about")
-      )
-        return null;
-
-      episodes.push({
-        idx: index + 1,
-        no: noStr,
-        title,
-        image,
-        image_large,
-        plot,
-        publishedDate,
-        rating: {
-          count,
-          star,
-        },
-      });
-    } catch (ss) {
-      console.log(ss.message);
-    }
-  });
+  const episodes = json.props.pageProps.contentData.section.episodes.items;
+  const seasons = json.props.pageProps.contentData.section.seasons;
 
   return {
-    name: name,
-    episodes: episodes,
+    name: json.props.pageProps.contentData.entityMetadata.titleText.text,
+    episodes: Object.values(episodes).map((e, i) => {
+      return {
+        idx: i + 1,
+        no: e.episode,
+        title: e.titleText,
+        image: e.image.url,
+        image_large: e.image.url,
+        image_caption: e.image.caption,
+        plot: e.plot,
+        publishedDate: new Date(
+          e.releaseDate.year,
+          e.releaseDate.month - 1,
+          e.releaseDate.day
+        ).toISOString(),
+        rating: {
+          count: e.voteCount,
+          star: e.aggregateRating,
+        },
+      };
+    }),
+    all_seasons: seasons.map((s) => ({
+      id: s.value,
+      name: `Season ${s.value}`,
+      api_path: `/title/${id}/season/${s.value}`,
+    })),
   };
 }
