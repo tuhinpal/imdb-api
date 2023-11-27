@@ -1,6 +1,19 @@
 ![IMDB API](https://user-images.githubusercontent.com/51857187/170807293-a52d8141-f743-4501-82e5-55e3d4286e61.jpg)
 
-📖 **Note**: `imdb-api.tprojects.workers.dev` is redirected to `imdb-api.projects.thetuhin.com`. Please update your api url to improve latency.
+## Incidents 🔔
+
+<details>
+<summary><strong>1. November 27, 2023 - Bombarded with DDos and DoS </strong></summary>
+
+**Attention:** Due to a series of DDoS and DoS attacks targeting our free server, I have implemented stringent security measures. Upon reviewing the server logs, I identified that numerous production applications are directly utilizing the `imdb-api.projects.thetuhin.com` endpoint. I urge these application owners to deploy their own Cloudflare Workers to mitigate risk and enhance security.
+
+As part of my response, I have established DDoS protection rules. While these measures are in place, legitimate users may encounter a security challenge to verify their status as human users. Please note that IP addresses originating from Ovh and Hetzner Cloud services have been permanently blocked as a precaution.
+
+I appreciate your understanding and cooperation.
+
+</details>
+
+
 
 ## Features 🪶
 
