@@ -1,4 +1,4 @@
 name = "imdb-api"
+compatibility_date = "2023-12-01"
 
-workers_dev = true
-compatibility_date = "2023-02-28"
+main="src/index.ts"

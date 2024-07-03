@@ -1,45 +1,37 @@
 {
-  "private": true,
   "name": "imdb-api",
-  "version": "1.0.3",
   "description": "Serverless IMDB API powered by Cloudflare Worker",
-  "main": "src/index.js",
+  "version": "3.0.0",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "wrangler dev src/index.js --port 3000",
-    "publish": "wrangler deploy src/index.js",
-    "test": "jest",
-    "start": "wrangler dev src/index.js --port 3000",
-    "bump": "node scripts/bump-version.js"
-  },
-  "author": "tuhinpal <me@thetuhin.com>",
-  "license": "Apache-2.0",
-  "devDependencies": {
-    "axios": "^0.27.2",
-    "jest": "^28.1.0",
-    "wrangler": "^3.3.0"
-  },
-  "dependencies": {
-    "dom-parser": "^0.1.6",
-    "hono": "^1.4.1",
-    "html-entities": "^2.3.3",
-    "qs": "^6.11.1"
-  },
-  "directories": {
-    "test": "tests"
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tuhinpal/imdb-api.git"
   },
   "keywords": [
-    "imdb",
-    "imdb-api",
-    "movie-list",
-    "cloudflare-worker",
-    "cloudflare-workers"
+    "imdb"
   ],
+  "author": "Tuhin Kanti Pal <me@thetuhin.com>",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/tuhinpal/imdb-api/issues"
   },
-  "homepage": "https://github.com/tuhinpal/imdb-api#readme"
+  "homepage": "https://github.com/tuhinpal/imdb-api#readme",
+  "dependencies": {
+    "@hono/graphql-server": "^0.4.3",
+    "any-date-parser": "^1.5.4",
+    "dayjs": "^1.11.11",
+    "hono": "^4.3.1",
+    "http-errors": "^2.0.0",
+    "linkedom": "^0.16.11",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240403.0",
+    "@types/http-errors": "^2.0.4",
+    "wrangler": "^3.47.0"
+  }
 }
