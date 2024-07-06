@@ -46,7 +46,13 @@ export const imdbApi = async <T>(props: ImdbApiProps) => {
   const response = await fetch(constructedUrl.toString(), {
     method,
     headers: {
-      "Content-Type": "application/json",
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+      "X-Imdb-Client-Name": "imdb-web-next-localized",
+      "X-Imdb-User-Language": "en-US",
+      "X-Imdb-User-Country": "US",
+
+      ...(body ? { "Content-Type": "application/json" } : {}),
       ...headers,
     },
     body: body ? JSON.stringify(body) : undefined,

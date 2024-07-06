@@ -50,3 +50,29 @@ export enum SortOption {
   YEAR = "YEAR",
   RELEASE_DATE = "RELEASE_DATE",
 }
+
+export type Credit = {
+  id: string;
+  name: string;
+  image?: Image;
+};
+
+export type Country = {
+  id: string;
+  name: string;
+};
+
+export type Language = {
+  id: string;
+  name: string;
+};
+
+export type Company = {
+  id: string;
+  name: string;
+};
+
+export type Genre = {
+  id: string;
+  name: string;
+};

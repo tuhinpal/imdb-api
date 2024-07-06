@@ -10,7 +10,6 @@ export function secondsToRuntime(totalSeconds: number = 0): Runtime {
 
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
 
   let text = "";
   if (hours > 0) text += `${hours}h `;
