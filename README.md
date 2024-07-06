@@ -1,19 +1,20 @@
+## Important Update: Project Discontinued 🔔
+
+IMDb has recently launched their [official API](https://developer.imdb.com/), providing developers with authorized access to their database. Given this development, I've made the decision to discontinue maintenance of this project for the following reasons:
+
+1. To avoid potential conflicts with IMDb's terms of service and intellectual property rights.
+2. To encourage the use of officially supported and maintained data sources.
+
+Recommendations for users of this project:
+
+1. Transition to IMDb's official API for the most up-to-date and reliable movie data.
+2. Consider using alternative sources like TMDB (The Movie Database) API as another robust option.
+
+This repository will be archived to preserve the code for reference purposes. Thank you to all contributors and users for your support throughout this project's lifespan.
+
+For any questions or concerns, please refer to IMDb's developer documentation or explore TMDB's API offerings.
+
 ![IMDB API](https://user-images.githubusercontent.com/51857187/170807293-a52d8141-f743-4501-82e5-55e3d4286e61.jpg)
-
-## Incidents 🔔
-
-<details>
-<summary><strong>1. November 27, 2023 - Bombarded with DDos and DoS </strong></summary>
-
-**Attention:** Due to a series of DDoS and DoS attacks targeting our free server, I have implemented stringent security measures. Upon reviewing the server logs, I identified that numerous production applications are directly utilizing the `imdb-api.projects.thetuhin.com` endpoint. I urge these application owners to deploy their own Cloudflare Workers to mitigate risk and enhance security.
-
-As part of my response, I have established DDoS protection rules. While these measures are in place, legitimate users may encounter a security challenge to verify their status as human users. Please note that IP addresses originating from Ovh and Hetzner Cloud services have been permanently blocked as a precaution.
-
-I appreciate your understanding and cooperation.
-
-</details>
-
-
 
 ## Features 🪶
 
@@ -31,7 +32,6 @@ If you anticipate sending a large number of requests, it is recommended that you
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tuhinpal/imdb-api)
 
 After deployed, map the worker to a Domain Name to configure cache. Only Workers deployed to custom domains have access to functional cache operations.
-
 
 ## Run with docker 🐋
 
